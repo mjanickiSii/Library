@@ -7,3 +7,5 @@ bower_components/
 node_modules/
 /Library/ExternalResource/bootstrap
 /Library/ExternalResource/jquery/scripts
+/Library.Domain/obj/Debug
+/Library.Domain.Tests/obj/Debug
