@@ -6,3 +6,4 @@ packages/
 bower_components/
 node_modules/
 /Library/ExternalResource/bootstrap
+/Library/ExternalResource/jquery/scripts

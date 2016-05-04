@@ -6,7 +6,7 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 
 var gulp = require('gulp');
 
-gulp.task('default', ['copy-bootstrap']);
+gulp.task('default', ['copy-bootstrap', 'copy-jquery']);
 
 gulp.task('copy-bootstrap', ['copy-bootstrap-less', 'copy-bootstrap-js']);
 
@@ -18,3 +18,7 @@ gulp.task('copy-bootstrap-less', function () {
 gulp.task('copy-bootstrap-js', function () {
     gulp.src('bower_components/bootstrap/dist/js/bootstrap.js').pipe(gulp.dest('Library/ExternalResource/bootstrap/scripts'));
 });
+
+gulp.task('copy-jquery', () => { 
+    gulp.src('bower_components/jquery/dist/jquery.js').pipe(gulp.dest('Library/ExternalResource/jquery/scripts'))
+})
