@@ -5,3 +5,4 @@ Library/obj/
 packages/
 bower_components/
 node_modules/
+/Library/ExternalResource/bootstrap
