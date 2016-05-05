@@ -9,3 +9,4 @@ node_modules/
 /Library/ExternalResource/jquery/scripts
 /Library.Domain/obj/Debug
 /Library.Domain.Tests/obj/Debug
+/Library/Resources/scripts

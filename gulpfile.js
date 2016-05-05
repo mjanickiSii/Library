@@ -5,20 +5,43 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 */
 
 var gulp = require('gulp');
+var del = require('del');
+var runSequence = require('run-sequence');
 
-gulp.task('default', ['copy-bootstrap', 'copy-jquery']);
+//var componentsDestinationPath = 'Library/ExternalResource';
+var componentsDistributionPath = 'Library/Resources';
+var componentsSrcPath = 'Library/ExternalSource';
+var bootstrapDestinationPath = '/bootstrap';
+//var jqueryDestinationPath = '/jquery';
 
-gulp.task('copy-bootstrap', ['copy-bootstrap-less', 'copy-bootstrap-js']);
+var componentsSourcePath = 'bower_components';
+var bootstrapSourcePath = '/bootstrap';
+var jquerySourcePath = '/jquery';
 
-gulp.task('copy-bootstrap-less', function () {
-    gulp.src('bower_components/bootstrap/less/**/*.*').pipe(gulp.dest('Library/ExternalResource/bootstrap/less'));
-    gulp.src('bower_components/bootstrap/dist/fonts/**/*.*').pipe(gulp.dest('Library/ExternalResource/bootstrap/fonts'));
+gulp.task('default', () =>{
+    runSequence('cleanup', ['copy-jquery']);/*'copy-bootstrap',*/
 });
 
-gulp.task('copy-bootstrap-js', function () {
-    gulp.src('bower_components/bootstrap/dist/js/bootstrap.js').pipe(gulp.dest('Library/ExternalResource/bootstrap/scripts'));
+gulp.task('cleanup', () => {
+    return del([componentsDistributionPath, componentsSrcPath]);
 });
 
-gulp.task('copy-jquery', () => { 
-    gulp.src('bower_components/jquery/dist/jquery.js').pipe(gulp.dest('Library/ExternalResource/jquery/scripts'))
-})
+gulp.task('copy-bootstrap', () =>{
+    return runSequence(['copy-bootstrap-fonts', 'copy-bootstrap-less', 'copy-bootstrap-js']);
+});
+
+gulp.task('copy-bootstrap-fonts', () => {
+    return gulp.src(bootstrapSourcePath + '/dist/fonts/**/*.*').pipe(gulp.dest(bootstrapDestinationPath +'/fonts'));
+});
+
+gulp.task('copy-bootstrap-less', () => {
+    return gulp.src(bootstrapSourcePath + '/less/**/*.*').pipe(gulp.dest(bootstrapDestinationPath + '/less'));
+});
+
+gulp.task('copy-bootstrap-js', () => {
+    return gulp.src(bootstrapSourcePath + '/dist/js/bootstrap.js').pipe(gulp.dest(bootstrapDestinationPath +'/scripts'));
+});
+
+gulp.task('copy-jquery', () => {
+    return gulp.src(componentsSourcePath + jquerySourcePath + '/dist/jquery.js').pipe(gulp.dest(componentsDistributionPath + '/scripts'))
+});
