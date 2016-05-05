@@ -8,22 +8,22 @@ var gulp = require('gulp');
 var del = require('del');
 var runSequence = require('run-sequence');
 
-//var componentsDestinationPath = 'Library/ExternalResource';
-var componentsDistributionPath = 'Library/Resources';
-var componentsSrcPath = 'Library/ExternalSource';
-var bootstrapDestinationPath = '/bootstrap';
-//var jqueryDestinationPath = '/jquery';
+var destinationDistributionPath = 'Library/Resources';
+var destinationSourcePath = 'Library/ExternalSource';
+var destinationScriptsPath = destinationDistributionPath + '/scripts';
+var destinationStylesPath = destinationDistributionPath + '/styles';
+var destinationContentPath = destinationDistributionPath + '/content';
 
-var componentsSourcePath = 'bower_components';
-var bootstrapSourcePath = '/bootstrap';
-var jquerySourcePath = '/jquery';
+var sourcePath = 'bower_components';
+var bootstrapSourcePath = sourcePath + '/bootstrap';
+var jquerySourcePath = sourcePath + '/jquery';
 
 gulp.task('default', () =>{
-    runSequence('cleanup', ['copy-jquery']);/*'copy-bootstrap',*/
+    runSequence('cleanup', ['copy-bootstrap', 'copy-jquery']);
 });
 
 gulp.task('cleanup', () => {
-    return del([componentsDistributionPath, componentsSrcPath]);
+    return del([destinationDistributionPath, destinationSourcePath]);
 });
 
 gulp.task('copy-bootstrap', () =>{
@@ -31,17 +31,17 @@ gulp.task('copy-bootstrap', () =>{
 });
 
 gulp.task('copy-bootstrap-fonts', () => {
-    return gulp.src(bootstrapSourcePath + '/dist/fonts/**/*.*').pipe(gulp.dest(bootstrapDestinationPath +'/fonts'));
+    return gulp.src(bootstrapSourcePath + '/dist/fonts/**/*.*').pipe(gulp.dest(destinationContentPath + '/bootstrap/fonts'));
 });
 
 gulp.task('copy-bootstrap-less', () => {
-    return gulp.src(bootstrapSourcePath + '/less/**/*.*').pipe(gulp.dest(bootstrapDestinationPath + '/less'));
+    return gulp.src(bootstrapSourcePath + '/less/**/*.*').pipe(gulp.dest(destinationSourcePath + '/bootstrap/less'));
 });
 
 gulp.task('copy-bootstrap-js', () => {
-    return gulp.src(bootstrapSourcePath + '/dist/js/bootstrap.js').pipe(gulp.dest(bootstrapDestinationPath +'/scripts'));
+    return gulp.src(bootstrapSourcePath + '/dist/js/bootstrap.js').pipe(gulp.dest(destinationScriptsPath));
 });
 
 gulp.task('copy-jquery', () => {
-    return gulp.src(componentsSourcePath + jquerySourcePath + '/dist/jquery.js').pipe(gulp.dest(componentsDistributionPath + '/scripts'))
+    return gulp.src(jquerySourcePath + '/dist/jquery.js').pipe(gulp.dest(destinationScriptsPath))
 });

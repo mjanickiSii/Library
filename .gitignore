@@ -10,3 +10,5 @@ node_modules/
 /Library.Domain/obj/Debug
 /Library.Domain.Tests/obj/Debug
 /Library/Resources/scripts
+/Library/Resources/content/bootstrap/fonts
+/Library/ExternalSource/bootstrap/less
