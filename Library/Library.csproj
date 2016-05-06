@@ -102,10 +102,83 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ExternalSource\bootstrap\less\alerts.less" />
+    <Content Include="ExternalSource\bootstrap\less\badges.less" />
+    <Content Include="ExternalSource\bootstrap\less\bootstrap.less" />
+    <Content Include="ExternalSource\bootstrap\less\breadcrumbs.less" />
+    <Content Include="ExternalSource\bootstrap\less\button-groups.less" />
+    <Content Include="ExternalSource\bootstrap\less\buttons.less" />
+    <Content Include="ExternalSource\bootstrap\less\carousel.less" />
+    <Content Include="ExternalSource\bootstrap\less\close.less" />
+    <Content Include="ExternalSource\bootstrap\less\code.less" />
+    <Content Include="ExternalSource\bootstrap\less\component-animations.less" />
+    <Content Include="ExternalSource\bootstrap\less\dropdowns.less" />
+    <Content Include="ExternalSource\bootstrap\less\forms.less" />
+    <Content Include="ExternalSource\bootstrap\less\glyphicons.less" />
+    <Content Include="ExternalSource\bootstrap\less\grid.less" />
+    <Content Include="ExternalSource\bootstrap\less\input-groups.less" />
+    <Content Include="ExternalSource\bootstrap\less\jumbotron.less" />
+    <Content Include="ExternalSource\bootstrap\less\labels.less" />
+    <Content Include="ExternalSource\bootstrap\less\list-group.less" />
+    <Content Include="ExternalSource\bootstrap\less\media.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\alerts.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\background-variant.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\border-radius.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\buttons.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\center-block.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\clearfix.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\forms.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\gradients.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\grid-framework.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\grid.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\hide-text.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\image.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\labels.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\list-group.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\nav-divider.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\nav-vertical-align.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\opacity.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\pagination.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\panels.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\progress-bar.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\reset-filter.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\reset-text.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\resize.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\responsive-visibility.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\size.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\tab-focus.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\table-row.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\text-emphasis.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\text-overflow.less" />
+    <Content Include="ExternalSource\bootstrap\less\mixins\vendor-prefixes.less" />
+    <Content Include="ExternalSource\bootstrap\less\modals.less" />
+    <Content Include="ExternalSource\bootstrap\less\navbar.less" />
+    <Content Include="ExternalSource\bootstrap\less\navs.less" />
+    <Content Include="ExternalSource\bootstrap\less\normalize.less" />
+    <Content Include="ExternalSource\bootstrap\less\pager.less" />
+    <Content Include="ExternalSource\bootstrap\less\pagination.less" />
+    <Content Include="ExternalSource\bootstrap\less\panels.less" />
+    <Content Include="ExternalSource\bootstrap\less\popovers.less" />
+    <Content Include="ExternalSource\bootstrap\less\print.less" />
+    <Content Include="ExternalSource\bootstrap\less\progress-bars.less" />
+    <Content Include="ExternalSource\bootstrap\less\responsive-embed.less" />
+    <Content Include="ExternalSource\bootstrap\less\responsive-utilities.less" />
+    <Content Include="ExternalSource\bootstrap\less\scaffolding.less" />
+    <Content Include="ExternalSource\bootstrap\less\tables.less" />
+    <Content Include="ExternalSource\bootstrap\less\theme.less" />
+    <Content Include="ExternalSource\bootstrap\less\thumbnails.less" />
+    <Content Include="ExternalSource\bootstrap\less\tooltip.less" />
+    <Content Include="ExternalSource\bootstrap\less\type.less" />
+    <Content Include="ExternalSource\bootstrap\less\utilities.less" />
+    <Content Include="ExternalSource\bootstrap\less\variables.less" />
+    <Content Include="ExternalSource\bootstrap\less\wells.less" />
     <Content Include="Global.asax" />
     <Content Include="Resources\content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Resources\scripts\bootstrap.js" />
     <Content Include="Resources\scripts\jquery.js" />
+    <Content Include="Resources\styles\bootstrap.css" />
+    <Content Include="Resources\styles\main.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +198,14 @@
     <Content Include="Resources\content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Resources\content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Resources\content\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\main.less" />
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.bindings">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
