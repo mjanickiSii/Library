@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EC2AA457-3810-44D7-88F3-0648F84BC71C}</ProjectGuid>
+    <ProjectGuid>{E7719815-698F-4573-A8CE-1EEB04F6F98C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Library.Domain</RootNamespace>
-    <AssemblyName>Library.Domain</AssemblyName>
+    <RootNamespace>Library.DataProviders</RootNamespace>
+    <AssemblyName>Library.DataProviders</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,12 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Books\Book.cs" />
-    <Compile Include="Entities\Books\BookCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\IBooksRepository.cs" />
+    <Compile Include="Repositories\BooksRepository.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Library.Domain\Library.Domain.csproj">
+      <Project>{ec2aa457-3810-44d7-88f3-0648f84bc71c}</Project>
+      <Name>Library.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

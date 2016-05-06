@@ -13,3 +13,4 @@ node_modules/
 /Library/Resources/content/bootstrap/fonts
 /Library/ExternalSource/bootstrap/less
 /Library/Resources/styles
+/Library.DataProviders/obj/Debug

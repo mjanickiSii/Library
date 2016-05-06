@@ -1,4 +1,4 @@
-﻿/// <binding BeforeBuild='default' ProjectOpened='default' />
+﻿/// <binding ProjectOpened='default' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -69,6 +69,6 @@ gulp.task('copy-react', () => {
 
 gulp.task('copy-bootstrap', gulp.parallel('copy-bootstrap-fonts', 'copy-bootstrap-css', 'copy-bootstrap-less', 'copy-bootstrap-js'));
 
-gulp.task('start-dev', gulp.series('cleanup', gulp.parallel('copy-bootstrap', 'copy-jquery','copy-react'), gulp.parallel('compile-less')));//, 'watch-less'
+gulp.task('start-dev', gulp.series('cleanup', gulp.parallel('copy-bootstrap', 'copy-jquery', 'copy-react'), gulp.parallel('compile-less', 'watch-less')));
 
 gulp.task('default', gulp.series('start-dev'));
