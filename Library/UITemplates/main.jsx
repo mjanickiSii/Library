@@ -26,11 +26,23 @@ var BookListRow = React.createClass({
     }
 });
 var BookList = React.createClass({
-    renderItems: function () {
-        return this.props.booksList.map(
+    renderItems: function (items) {
+        return items.map(
             function (book) {
                 return(
                     <BookListRow key={book.Isbn} book={book} />);});
+    },
+    getInitialState: function () {
+        return {data:[]};
+    },
+    componentDidMount: function () {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function() {
+                this.setState({data:data});
+            }.bind(this)
+        });
     },
     render: function(){
         return (
@@ -38,7 +50,7 @@ var BookList = React.createClass({
             <thead>
             </thead>
             <tbody>
-                {this.renderItems()}
+                {this.renderItems(this.state.data)}
             </tbody>
         </table>);
     }
