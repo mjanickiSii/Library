@@ -200,17 +200,14 @@
     <Content Include="Global.asax" />
     <Content Include="Resources\content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Resources\scripts\bootstrap.js" />
+    <Content Include="Resources\scripts\browser.js" />
     <Content Include="Resources\scripts\jquery.js" />
+    <Content Include="Resources\scripts\main.js" />
+    <Content Include="Resources\scripts\marked.js" />
+    <Content Include="Resources\scripts\react-dom.js" />
+    <Content Include="Resources\scripts\react.js" />
     <Content Include="Resources\styles\bootstrap.css" />
     <Content Include="Resources\styles\main.css" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +238,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Views\Books\Index.cshtml" />
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="UITemplates\main.jsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -252,6 +249,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library.DataProviders\Library.DataProviders.csproj">

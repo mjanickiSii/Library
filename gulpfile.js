@@ -8,6 +8,8 @@ var gulp = require('gulp');
 var del = require('del');
 var watch = require('gulp-watch');
 var less = require('gulp-less');
+var babel = require('gulp-babel');
+
 
 var destinationDistributionPath = 'Library/Resources';
 var destinationSourcePath = 'Library/ExternalSource';
@@ -18,10 +20,15 @@ var destinationContentPath = destinationDistributionPath + '/content';
 var contentPath = "Library/Content";
 var lessContentPath = contentPath + '/**/*.less';
 
+var uITemplatesPath = "Library/UITemplates";
+var jSXTemplatesPath = uITemplatesPath + '/**/*.jsx';
+
 var sourcePath = 'bower_components';
 var bootstrapSourcePath = sourcePath + '/bootstrap';
 var jquerySourcePath = sourcePath + '/jquery';
 var reactSourcePath = sourcePath + '/react';
+var babelSourcePath = sourcePath + '/babel';
+var markedSourcePath = sourcePath + '/marked';
 
 gulp.task('watch-less', () =>{
     return watch(lessContentPath, gulp.series('compile-less'));
@@ -67,8 +74,27 @@ gulp.task('copy-react', () => {
         pipe(gulp.dest(destinationScriptsPath))
 });
 
+gulp.task('copy-babel', () => {
+    return gulp.src(babelSourcePath + '/browser.js').
+        pipe(gulp.dest(destinationScriptsPath))
+});
+
+gulp.task('compile-babel', () => {
+    return gulp.src(jSXTemplatesPath).
+        pipe(babel({ presets: ['react'] })).pipe(gulp.dest(destinationScriptsPath));
+});
+
+gulp.task('watch-babel', () => {
+    return watch(jSXTemplatesPath, gulp.series('compile-babel'));
+});
+
+gulp.task('copy-marked', () => {
+    return gulp.src(markedSourcePath + '/lib/marked.js').
+        pipe(gulp.dest(destinationScriptsPath))
+});
+
 gulp.task('copy-bootstrap', gulp.parallel('copy-bootstrap-fonts', 'copy-bootstrap-css', 'copy-bootstrap-less', 'copy-bootstrap-js'));
 
-gulp.task('start-dev', gulp.series('cleanup', gulp.parallel('copy-bootstrap', 'copy-jquery', 'copy-react'), gulp.parallel('compile-less', 'watch-less')));
+gulp.task('start-dev', gulp.series('cleanup', gulp.parallel(gulp.series('copy-bootstrap', 'compile-less', 'watch-less'), 'copy-jquery', 'copy-react', 'copy-marked', 'copy-babel', 'compile-babel', 'watch-babel')));
 
 gulp.task('default', gulp.series('start-dev'));

@@ -6,4 +6,22 @@
 }
 
 <h2>Index</h2>
+<div id="addItem"></div>
+<div id="booksList"></div>
+<div id="footer"></div>
+<script type="text/javascript">
+    var tempData = [{ Title: "Title 1", Isbn: "1234" },
+    { Title: "Title 2", Isbn: "2345" },
+    { Title: "Title 3", Isbn: "3456" },
+    { Title: "Title 4", Isbn: "4567" },
+    { Title: "Title 5", Isbn: "5678" },
+    { Title: "Title 6", Isbn: "6789" },
+    { Title: "Title 7", Isbn: "7891" },
+    { Title: "Title 8", Isbn: "8912" },
+    { Title: "Title 9", Isbn: "9123" }, ];
+</script>
+<script type="text/babel">
+    ReactDOM.render(<ListFooter />,document.getElementById("footer"));
+    ReactDOM.render(<BookList booksList={tempData} />,document.getElementById("booksList"));
+</script>
 
