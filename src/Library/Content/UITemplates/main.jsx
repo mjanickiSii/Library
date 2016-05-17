@@ -1,10 +1,16 @@
-﻿var AddButton = React.createClass({ render: function () { return (<button className={this.props.className }>{this.props.Text}</button>); } });
+﻿var React = require('react');
+var ReactDOM = require('react-dom');
+var BooksListActions = require('../Flux/actions/BooksListActions');
+var BooksListStore = require('../Flux/stores/BooksListStore');
+
+var RefreshButton = React.createClass({ render: function () { return (<button className={this.props.className }>{this.props.Text}</button>); } });
 var ListFooter = React.createClass({
     render: function () {
         return (
         <div><AddButton className="btn-success" Text="Add" /></div>);
     }
 });
+
 var BookListRowIsbn = React.createClass({
     render: function () {
         return (
@@ -29,18 +35,27 @@ class BookListRow extends React.Component {
             </tr>);
     }
 }
+
+function getBookList() {
+    return CoreStore.getAll();
+};
+
 var BookList = React.createClass({
     renderItems: function (items) {
         return items.map(
             function (book) {
                 return (
                     <BookListRow key={book.Isbn} book={book} />);
-});
+            });
     },
     getInitialState: function () {
         return { data: [] };
     },
+    componentUnmount: function () {
+        BooksListStore.removeChangeListener(this._onChange);
+    },
     componentDidMount: function () {
+        BooksListStore.addChangeListener(this._onChange);
         $.ajax({
             url: this.getUrl(),
             dataType: 'json',
@@ -56,17 +71,37 @@ var BookList = React.createClass({
         console.error(this.getUrl(), status, err.toString());
         alert(err.toString());
     },
+    _onChange: function () {
+
+    },
     getUrl: function () {
         return this.props.url;
     },
     render: function () {
         return (
-        <table className="table-responsive table-bordered">
-            <thead>
-            </thead>
-            <tbody>
-                {this.renderItems(this.state.data)}
-            </tbody>
-        </table>);
+        <div>
+    <table className="table-responsive table-bordered">
+        <thead>
+        </thead>
+        <tbody>
+            {this.renderItems(this.state.data)}
+        </tbody>
+    </table>
+<Pager />
+    <RefreshButton className="btn-success" Text="Refresh"></RefreshButton>
+        </div>);
     }
 });
+
+class Pager extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return (<div>Pager</div>);
+    }
+    }
+
+    ReactDOM.render(<BookList url="/Books/GetAll" />,document.getElementById("booksList"));
+
+module.exports = BookList;

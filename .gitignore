@@ -14,3 +14,4 @@ node_modules/
 /Library/ExternalSource/bootstrap/less
 /Library/Resources/styles
 /Library.DataProviders/obj/Debug
+/src/Library/Content/UITemplatesCompiled
