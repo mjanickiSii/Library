@@ -1,5 +1,3 @@
-﻿var keymirror = require('keymirror');
-
-module.exports = keymirror({
-    RELOAD: null
-});
+﻿module.exports = {
+    RELOAD: 'BOOKS_LIST_RELOAD'
+};

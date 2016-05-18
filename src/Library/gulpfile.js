@@ -31,7 +31,7 @@ paths.concatCssDest = paths.webroot + "css/site.min.css";
 paths.UITemplatesDir = paths.contentroot + "UITemplates/";
 paths.UITemplates = paths.UITemplatesDir + "**/*.jsx";
 paths.UITemplatesCompiledDir = paths.contentroot + "UITemplatesCompiled/";
-paths.UITemplatesCompiled = paths.UITemplatesCompiledDir + "**/*.js";
+paths.UITemplatesCompiled = paths.UITemplatesCompiledDir + "*.js";
 paths.UITemplatesDest = paths.webroot + "js/";
 paths.Flux = paths.contentroot + "Flux/**/*.js";
 

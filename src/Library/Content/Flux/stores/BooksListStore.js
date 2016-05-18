@@ -2,34 +2,40 @@
 var BooksListConstants = require('../constants/BooksListConstants')
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var BooksListAPI = require('../utils/CoreAPI');
+var DataProvider = require('../utils/DataProvider');
 
 var CHANGE_EVENT = 'change';
 
-_books = [];
+_books = [{Isbn:'1234',Title:'Title'}];
 
 var BooksListStore = assign({}, EventEmitter.prototype, {
     emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
     addChangeListener: function (callback) {
-        this.on('change',callback);
+        this.on(CHANGE_EVENT, callback);
     },
     removeChangeListener: function (callback) {
-        this.removeListener('change', callback);
+        this.removeListener(CHANGE_EVENT, callback);
     },
+    success: function (data) {
+        _books= data;
+    },
+    dispatcherIndex: CoreDispatcher.register(function (payload) {
+        var action = payload.action;
+        switch (action.actionType) {
+            case BooksListConstants.RELOAD:
+                DataProvider.getData(action.url, data => {
+                    _books = data;
+                    BooksListStore.emitChange();
+                });
+                break;
+        }
+        return true;
+    }),
     getAll: function () {
-        return _book;
+        return _books;
     }
-});
-
-CoreDispatcher.register(function (payload) {
-    var action = payload.action;
-    switch (action.actionType) {
-        case core.RELOAD:
-            break;
-    }
-    return true;
 });
 
 module.exports = BooksListStore;

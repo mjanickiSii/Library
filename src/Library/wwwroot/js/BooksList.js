@@ -3,24 +3,30 @@ var CoreDispatcher = require('../dispatcher/CoreDispatcher');
 var BooksListConstants = require('../constants/BooksListConstants');
 
 var BooksListActions = {
-    
+    reload: function (url) {
+        CoreDispatcher.handleViewAction({
+            actionType: BooksListConstants.RELOAD,
+            url: url
+        });
+    }
 }
 
 module.exports = BooksListActions;
-},{"../constants/BooksListConstants":2,"../dispatcher/CoreDispatcher":3}],2:[function(require,module,exports){
-var keymirror = require('keymirror');
 
-module.exports = keymirror({
-    RELOAD: null
-});
-},{"keymirror":11}],3:[function(require,module,exports){
+},{"../constants/BooksListConstants":2,"../dispatcher/CoreDispatcher":3}],2:[function(require,module,exports){
+module.exports = {
+    RELOAD: 'BOOKS_LIST_RELOAD'
+};
+},{}],3:[function(require,module,exports){
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('object-assign');
+
+var VIEW_ACTION = 'VIEW_ACTION';
 
 var CoreDispatcher = assign(new Dispatcher(), {
     handleViewAction: function (action) {
         var payload = {
-            source: 'VIEW_ACTION',
+            source: VIEW_ACTION,
             action: action
         };
         this.dispatch(payload);
@@ -28,72 +34,87 @@ var CoreDispatcher = assign(new Dispatcher(), {
 });
 
 module.exports = CoreDispatcher;
-},{"flux":9,"object-assign":12}],4:[function(require,module,exports){
+},{"flux":10,"object-assign":12}],4:[function(require,module,exports){
 var CoreDispatcher = require('../dispatcher/CoreDispatcher');
 var BooksListConstants = require('../constants/BooksListConstants')
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
-var BooksListAPI = require('../utils/CoreAPI');
+var DataProvider = require('../utils/DataProvider');
 
 var CHANGE_EVENT = 'change';
 
-_books = [];
+_books = [{Isbn:'1234',Title:'Title'}];
 
 var BooksListStore = assign({}, EventEmitter.prototype, {
     emitChange: function () {
         this.emit(CHANGE_EVENT);
     },
     addChangeListener: function (callback) {
-        this.on('change',callback);
+        this.on(CHANGE_EVENT, callback);
     },
     removeChangeListener: function (callback) {
-        this.removeListener('change', callback);
+        this.removeListener(CHANGE_EVENT, callback);
     },
+    success: function (data) {
+        _books= data;
+    },
+    dispatcherIndex: CoreDispatcher.register(function (payload) {
+        var action = payload.action;
+        switch (action.actionType) {
+            case BooksListConstants.RELOAD:
+                DataProvider.getData(action.url, data => {
+                    _books = data;
+                    BooksListStore.emitChange();
+                });
+                break;
+        }
+        return true;
+    }),
     getAll: function () {
-        return _book;
+        return _books;
     }
-});
-
-CoreDispatcher.register(function (payload) {
-    var action = payload.action;
-    switch (action.actionType) {
-        case core.RELOAD:
-            break;
-    }
-    return true;
 });
 
 module.exports = BooksListStore;
 
-},{"../constants/BooksListConstants":2,"../dispatcher/CoreDispatcher":3,"../utils/CoreAPI":5,"events":7,"object-assign":12}],5:[function(require,module,exports){
-var CoreDataProvider = {
-
+},{"../constants/BooksListConstants":2,"../dispatcher/CoreDispatcher":3,"../utils/DataProvider":5,"events":8,"object-assign":12}],5:[function(require,module,exports){
+var DataProvider = {
+    error: function (xhr, status, err) {
+        console.error(this.getUrl(), status, err.toString());
+        alert(err.toString());
+    },
+    getData: function(url,success) {
+        $.ajax({
+            url: url,
+            dataType: 'json',
+            cache: false,
+            success: success,
+            error: this.error
+        });
+    }
 }
 
-module.exports = CoreDataProvider;
+module.exports = DataProvider;
 },{}],6:[function(require,module,exports){
 var React = require('react');
 var ReactDOM = require('react-dom');
 var BooksListActions = require('../Flux/actions/BooksListActions');
 var BooksListStore = require('../Flux/stores/BooksListStore');
+var Pager = require('./Paging/Pager');
 
 var RefreshButton = React.createClass({
     displayName: 'RefreshButton',
+
+    propTypes: {
+        onRefresh: React.PropTypes.func.isRequired,
+        Text: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string
+    },
     render: function () {
         return React.createElement(
             'button',
-            { className: this.props.className },
+            { className: this.props.className, onClick: this.props.onRefresh },
             this.props.Text
-        );
-    } });
-var ListFooter = React.createClass({
-    displayName: 'ListFooter',
-
-    render: function () {
-        return React.createElement(
-            'div',
-            null,
-            React.createElement(AddButton, { className: 'btn-success', Text: 'Add' })
         );
     }
 });
@@ -138,42 +159,33 @@ class BookListRow extends React.Component {
     }
 }
 
-function getBookList() {
-    return CoreStore.getAll();
+function getState() {
+    return { data: BooksListStore.getAll() };
 };
 
 var BookList = React.createClass({
     displayName: 'BookList',
 
+    refresh: function () {
+        BooksListActions.reload(this.getUrl());
+    },
     renderItems: function (items) {
         return items.map(function (book) {
             return React.createElement(BookListRow, { key: book.Isbn, book: book });
         });
     },
     getInitialState: function () {
-        return { data: [] };
+        return getState();
     },
     componentUnmount: function () {
         BooksListStore.removeChangeListener(this._onChange);
     },
     componentDidMount: function () {
         BooksListStore.addChangeListener(this._onChange);
-        $.ajax({
-            url: this.getUrl(),
-            dataType: 'json',
-            cache: false,
-            success: this.success,
-            error: this.error
-        });
     },
-    success: function (data) {
-        this.setState({ data: data });
+    _onChange: function () {
+        this.setState(getState());
     },
-    error: function (xhr, status, err) {
-        console.error(this.getUrl(), status, err.toString());
-        alert(err.toString());
-    },
-    _onChange: function () {},
     getUrl: function () {
         return this.props.url;
     },
@@ -192,10 +204,17 @@ var BookList = React.createClass({
                 )
             ),
             React.createElement(Pager, null),
-            React.createElement(RefreshButton, { className: 'btn-success', Text: 'Refresh' })
+            React.createElement(RefreshButton, { className: 'btn-success', onRefresh: this.refresh, Text: 'Refresh' })
         );
     }
 });
+
+ReactDOM.render(React.createElement(BookList, { url: '/Books/GetAll' }), document.getElementById("booksList"));
+
+module.exports = BookList;
+},{"../Flux/actions/BooksListActions":1,"../Flux/stores/BooksListStore":4,"./Paging/Pager":7,"react":178,"react-dom":14}],7:[function(require,module,exports){
+var React = require('react');
+var ReactDOM = require('react-dom');
 
 class Pager extends React.Component {
     constructor(props) {
@@ -210,10 +229,8 @@ class Pager extends React.Component {
     }
 }
 
-ReactDOM.render(React.createElement(BookList, { url: '/Books/GetAll' }), document.getElementById("booksList"));
-
-module.exports = BookList;
-},{"../Flux/actions/BooksListActions":1,"../Flux/stores/BooksListStore":4,"react":178,"react-dom":14}],7:[function(require,module,exports){
+module.exports = Pager;
+},{"react":178,"react-dom":14}],8:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -513,7 +530,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2015, Facebook, Inc.
@@ -565,7 +582,7 @@ var invariant = function (condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":13}],9:[function(require,module,exports){
+},{"_process":13}],10:[function(require,module,exports){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
  * All rights reserved.
@@ -577,7 +594,7 @@ module.exports = invariant;
 
 module.exports.Dispatcher = require('./lib/Dispatcher');
 
-},{"./lib/Dispatcher":10}],10:[function(require,module,exports){
+},{"./lib/Dispatcher":11}],11:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2014-2015, Facebook, Inc.
@@ -811,62 +828,7 @@ var Dispatcher = (function () {
 
 module.exports = Dispatcher;
 }).call(this,require('_process'))
-},{"_process":13,"fbjs/lib/invariant":8}],11:[function(require,module,exports){
-/**
- * Copyright 2013-2014 Facebook, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
-"use strict";
-
-/**
- * Constructs an enumeration with keys equal to their value.
- *
- * For example:
- *
- *   var COLORS = keyMirror({blue: null, red: null});
- *   var myColor = COLORS.blue;
- *   var isColorValid = !!COLORS[myColor];
- *
- * The last line could not be performed if the values of the generated enum were
- * not equal to their keys.
- *
- *   Input:  {key1: val1, key2: val2}
- *   Output: {key1: key1, key2: key2}
- *
- * @param {object} obj
- * @return {object}
- */
-var keyMirror = function(obj) {
-  var ret = {};
-  var key;
-  if (!(obj instanceof Object && !Array.isArray(obj))) {
-    throw new Error('keyMirror(...): Argument must be an object.');
-  }
-  for (key in obj) {
-    if (!obj.hasOwnProperty(key)) {
-      continue;
-    }
-    ret[key] = key;
-  }
-  return ret;
-};
-
-module.exports = keyMirror;
-
-},{}],12:[function(require,module,exports){
+},{"_process":13,"fbjs/lib/invariant":9}],12:[function(require,module,exports){
 'use strict';
 /* eslint-disable no-unused-vars */
 var hasOwnProperty = Object.prototype.hasOwnProperty;

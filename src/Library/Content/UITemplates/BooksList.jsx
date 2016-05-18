@@ -2,12 +2,16 @@
 var ReactDOM = require('react-dom');
 var BooksListActions = require('../Flux/actions/BooksListActions');
 var BooksListStore = require('../Flux/stores/BooksListStore');
+var Pager = require('./Paging/Pager');
 
-var RefreshButton = React.createClass({ render: function () { return (<button className={this.props.className }>{this.props.Text}</button>); } });
-var ListFooter = React.createClass({
+var RefreshButton = React.createClass({
+    propTypes: {
+        onRefresh: React.PropTypes.func.isRequired,
+        Text: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string
+    },
     render: function () {
-        return (
-        <div><AddButton className="btn-success" Text="Add" /></div>);
+        return (<button className={this.props.className} onClick={this.props.onRefresh}>{this.props.Text}</button>);
     }
 });
 
@@ -36,11 +40,14 @@ class BookListRow extends React.Component {
     }
 }
 
-function getBookList() {
-    return CoreStore.getAll();
+function getState() {
+    return { data: BooksListStore.getAll() };
 };
 
 var BookList = React.createClass({
+    refresh: function () {
+        BooksListActions.reload(this.getUrl());
+    },
     renderItems: function (items) {
         return items.map(
             function (book) {
@@ -49,30 +56,16 @@ var BookList = React.createClass({
             });
     },
     getInitialState: function () {
-        return { data: [] };
+        return getState();
     },
     componentUnmount: function () {
         BooksListStore.removeChangeListener(this._onChange);
     },
     componentDidMount: function () {
         BooksListStore.addChangeListener(this._onChange);
-        $.ajax({
-            url: this.getUrl(),
-            dataType: 'json',
-            cache: false,
-            success: this.success,
-            error: this.error
-        });
-    },
-    success: function (data) {
-        this.setState({ data: data });
-    },
-    error: function (xhr, status, err) {
-        console.error(this.getUrl(), status, err.toString());
-        alert(err.toString());
     },
     _onChange: function () {
-
+        this.setState(getState());
     },
     getUrl: function () {
         return this.props.url;
@@ -88,19 +81,10 @@ var BookList = React.createClass({
         </tbody>
     </table>
 <Pager />
-    <RefreshButton className="btn-success" Text="Refresh"></RefreshButton>
+    <RefreshButton className="btn-success" onRefresh={this.refresh} Text="Refresh"></RefreshButton>
         </div>);
     }
 });
-
-class Pager extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (<div>Pager</div>);
-    }
-    }
 
     ReactDOM.render(<BookList url="/Books/GetAll" />,document.getElementById("booksList"));
 
